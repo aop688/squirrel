@@ -1,0 +1,32 @@
+#!/bin/bash
+set -e
+
+login_user=`/usr/bin/stat -f%Su /dev/console`
+squirrel_app_root="${DSTROOT}/Squirrel.app"
+squirrel_executable="${squirrel_app_root}/Contents/MacOS/Squirrel"
+rime_package_installer="${squirrel_app_root}/Contents/MacOS/rime-install"
+rime_shared_data_path="${squirrel_app_root}/Contents/SharedSupport"
+
+/usr/bin/sudo -u "${login_user}" /usr/bin/killall Squirrel > /dev/null || true
+
+"${squirrel_executable}" --register-input-source
+
+# Organize dict files into cn_dicts subdirectory if needed
+if [ -f "${rime_shared_data_path}/8105.dict.yaml" ] && [ ! -d "${rime_shared_data_path}/cn_dicts" ]; then
+    mkdir -p "${rime_shared_data_path}/cn_dicts"
+    # Move only cn_dicts dictionary files, keep rime_ice.dict.yaml in root
+    for dict in 8105.dict.yaml base.dict.yaml others.dict.yaml; do
+        if [ -f "${rime_shared_data_path}/${dict}" ]; then
+            mv "${rime_shared_data_path}/${dict}" "${rime_shared_data_path}/cn_dicts/"
+        fi
+    done
+fi
+
+if [ -z "${RIME_NO_PREBUILD}" ]; then
+    pushd "${rime_shared_data_path}" > /dev/null
+    "${squirrel_executable}" --build
+    popd > /dev/null
+fi && (
+    /usr/bin/sudo -u "${login_user}" "${squirrel_executable}" --enable-input-source
+    /usr/bin/sudo -u "${login_user}" "${squirrel_executable}" --select-input-source
+)

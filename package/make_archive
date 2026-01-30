@@ -1,0 +1,38 @@
+#! /bin/bash
+# enconding: utf-8
+
+set -e
+
+cd "$(dirname $0)"
+source common.sh
+
+app_version="$(get_app_version)"
+target_pkg="Squirrel-${app_version}.pkg"
+
+verify_archive() {
+    if ! [ -f "${target_pkg}" ]; then
+        echo >&2 "ERROR: file does not exit: ${target_pkg}"
+        exit 1
+    fi
+    echo 'sha256 checksum:'
+    echo "${checksum}  ${target_pkg}"
+    shasum -a 256 -c <<<"${checksum}  ${target_pkg}" || exit 1
+}
+
+create_archive() {
+    if [ -e "${target_pkg}" ]; then
+        echo >&2 "ERROR: target archive already exists: ${target_pkg}"
+        exit 1
+    fi
+    cp Squirrel.pkg "${target_pkg}"
+    echo 'sha256 checksum:'
+    shasum -a 256 "${target_pkg}"
+}
+
+if [ -n "${checksum}" ]; then
+    verify_archive
+else
+    create_archive
+fi
+
+echo "Archive created: ${target_pkg}"

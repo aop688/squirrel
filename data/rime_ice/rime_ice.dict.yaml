@@ -1,0 +1,64 @@
+# Rime dictionary
+# encoding: utf-8
+
+---
+name: rime_ice
+version: "2026-01-26"
+import_tables:
+  - cn_dicts/8105     # 字表
+  - cn_dicts/base     # 基础词库
+  - cn_dicts/others   # 一些杂项
+...
+
+# 大写字母
+A	A
+B	B
+C	C
+D	D
+E	E
+F	F
+G	G
+H	H
+I	I
+J	J
+K	K
+L	L
+M	M
+N	N
+O	O
+P	P
+Q	Q
+R	R
+S	S
+T	T
+U	U
+V	V
+W	W
+X	X
+Y	Y
+Z	Z
+
+# 数字参与中文造词
+0	ling
+1	yi
+1	yao
+2	er
+3	san
+4	si
+5	wu
+6	liu
+7	qi
+8	ba
+9	jiu
+
+M1
+M2
+M3
+M4
+3G
+4G
+5G
+2D
+3D
+4D
+3D打印

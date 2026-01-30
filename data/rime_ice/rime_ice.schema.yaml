@@ -1,0 +1,89 @@
+# Rime schema
+# encoding: utf-8
+
+# 雾凇拼音 - 简体中文全拼输入法（精简版）
+schema:
+  schema_id: rime_ice
+  name: 雾凇拼音
+  version: "2025-11-02-lite"
+  author:
+    - Dvel
+  description: |
+    雾凇拼音（精简版）
+    https://github.com/iDvel/rime-ice
+
+# 开关
+switches:
+  - name: ascii_mode
+    states: [ 中, Ａ ]
+  - name: ascii_punct
+    states: [ ¥, $ ]
+  - name: full_shape
+    states: [ 半角, 全角 ]
+
+# 输入引擎
+engine:
+  processors:
+    - ascii_composer
+    - recognizer
+    - key_binder
+    - speller
+    - punctuator
+    - selector
+    - navigator
+    - express_editor
+  segmentors:
+    - ascii_segmentor
+    - matcher
+    - abc_segmentor
+    - punct_segmentor
+    - fallback_segmentor
+  translators:
+    - punct_translator
+    - script_translator
+  filters:
+    - uniquifier
+
+# 主翻译器，拼音
+translator:
+  dictionary: rime_ice
+  enable_word_completion: true
+  spelling_hints: 8
+  always_show_comments: true
+  initial_quality: 1.2
+  preedit_format:
+    - xform/([jqxy])v/\$1u/
+    - xform/([nl])v/\$1v/
+    - xform/([nl])ue/\$1ve/
+    - xform/(?<=[A-Z])\s(?=[A-Z])//
+
+# 标点符号
+punctuator:
+  import_preset: default
+
+# 处理符合特定规则的输入
+recognizer:
+  import_preset: default
+
+# 快捷键
+key_binder:
+  import_preset: default
+
+# 拼写设定
+speller:
+  alphabet: zyxwvutsrqponmlkjihgfedcbaZYXWVUTSRQPONMLKJIHGFEDCBA
+  initials: zyxwvutsrqponmlkjihgfedcbaZYXWVUTSRQPONMLKJIHGFEDCBA
+  delimiter: " '"
+  algebra:
+    # 超级简拼
+    - erase/^hm$/
+    - erase/^m$/
+    - erase/^n$/
+    - erase/^ng$/
+    - abbrev/^([a-z]).+$/\$1/
+    - abbrev/^([zcs]h).+$/\$1/
+    # v u 转换
+    - derive/^([nl])ve$/\$1ue/
+    - derive/^([jqxy])u/\$1v/
+    - derive/^([nl])ue$/\$1ve/
+    - derive/^([jqxy])v/\$1u/
