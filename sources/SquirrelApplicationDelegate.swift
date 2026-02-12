@@ -50,7 +50,7 @@ final class SquirrelApplicationDelegate: NSObject, NSApplicationDelegate {
     squirrelTraits.setCString(SquirrelApp.logDir.path(), to: \.log_dir)
     squirrelTraits.setCString("Squirrel", to: \.distribution_code_name)
     squirrelTraits.setCString("鼠鬚管", to: \.distribution_name)
-    squirrelTraits.setCString(Bundle.main.object(forInfoDictionaryKey: kCFBundleVersionKey as String) as! String, to: \.distribution_version)
+    squirrelTraits.setCString(Bundle.main.object(forInfoDictionaryKey: kCFBundleVersionKey as String) as? String ?? "Unknown", to: \.distribution_version)
     squirrelTraits.setCString("rime.squirrel", to: \.app_name)
     rimeAPI.setup(&squirrelTraits)
   }
@@ -137,6 +137,9 @@ private extension SquirrelApplicationDelegate {
 
 extension NSApplication {
   var squirrelAppDelegate: SquirrelApplicationDelegate {
-    self.delegate as! SquirrelApplicationDelegate
+    guard let delegate = self.delegate as? SquirrelApplicationDelegate else {
+      fatalError("Expected SquirrelApplicationDelegate as app delegate")
+    }
+    return delegate
   }
 }

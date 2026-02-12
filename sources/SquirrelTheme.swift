@@ -141,22 +141,25 @@ final class SquirrelTheme {
   ]
 
   private(set) lazy var firstParagraphStyle: NSParagraphStyle = {
-    let style = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
+    let style = NSMutableParagraphStyle()
+    style.setParagraphStyle(NSParagraphStyle.default)
     style.paragraphSpacing = linespace / 2
     style.paragraphSpacingBefore = preeditLinespace / 2 + hilitedCornerRadius / 2
-    return style as NSParagraphStyle
+    return style
   }()
   private(set) lazy var paragraphStyle: NSParagraphStyle = {
-    let style = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
+    let style = NSMutableParagraphStyle()
+    style.setParagraphStyle(NSParagraphStyle.default)
     style.paragraphSpacing = linespace / 2
     style.paragraphSpacingBefore = linespace / 2
-    return style as NSParagraphStyle
+    return style
   }()
   private(set) lazy var preeditParagraphStyle: NSParagraphStyle = {
-    let style = NSMutableParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
+    let style = NSMutableParagraphStyle()
+    style.setParagraphStyle(NSParagraphStyle.default)
     style.paragraphSpacing = preeditLinespace / 2 + hilitedCornerRadius / 2
     style.lineSpacing = linespace
-    return style as NSParagraphStyle
+    return style
   }()
   private(set) lazy var edgeInset: NSSize = if self.vertical {
     NSSize(width: borderHeight + cornerRadius, height: borderWidth + cornerRadius)

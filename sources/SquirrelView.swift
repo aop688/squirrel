@@ -88,31 +88,17 @@ final class SquirrelView: NSView {
     if preeditRange.length > 0 {
       ranges.append(preeditRange)
     }
-    // swiftlint:disable:next identifier_name
-    var x0 = CGFloat.infinity, x1 = -CGFloat.infinity, y0 = CGFloat.infinity, y1 = -CGFloat.infinity
-    for range in ranges {
-      if let textRange = convert(range: range) {
-        let rect = contentRect(range: textRange)
-        x0 = min(rect.minX, x0)
-        x1 = max(rect.maxX, x1)
-        y0 = min(rect.minY, y0)
-        y1 = max(rect.maxY, y1)
-      }
-    }
-    return NSRect(x: x0, y: y0, width: x1-x0, height: y1-y0)
+    let rects = ranges.compactMap { convert(range: $0) }.map { contentRect(range: $0) }
+    return NSRect(unionOf: rects)
   }
   // Get the rectangle containing the range of text, will first convert to glyph range, expensive to calculate
   func contentRect(range: NSTextRange) -> NSRect {
-    // swiftlint:disable:next identifier_name
-    var x0 = CGFloat.infinity, x1 = -CGFloat.infinity, y0 = CGFloat.infinity, y1 = -CGFloat.infinity
+    var rects = [NSRect]()
     textLayoutManager.enumerateTextSegments(in: range, type: .selection, options: [.rangeNotRequired]) { _, rect, _, _ in
-      x0 = min(rect.minX, x0)
-      x1 = max(rect.maxX, x1)
-      y0 = min(rect.minY, y0)
-      y1 = max(rect.maxY, y1)
+      rects.append(rect)
       return true
     }
-    return NSRect(x: x0, y: y0, width: x1-x0, height: y1-y0)
+    return NSRect(unionOf: rects)
   }
 
   // Will triger - (void)drawRect:(NSRect)dirtyRect
@@ -443,18 +429,10 @@ private extension SquirrelView {
     } else if lineRects.count > 2 {
       leadingRect = lineRects[0]
       trailingRect = lineRects[lineRects.count-1]
-      // swiftlint:disable:next identifier_name
-      var x0 = CGFloat.infinity, x1 = -CGFloat.infinity, y0 = CGFloat.infinity, y1 = -CGFloat.infinity
-      for i in 1..<(lineRects.count-1) {
-        let rect = lineRects[i]
-        x0 = min(rect.minX, x0)
-        x1 = max(rect.maxX, x1)
-        y0 = min(rect.minY, y0)
-        y1 = max(rect.maxY, y1)
-      }
-      y0 = min(leadingRect.maxY, y0)
-      y1 = max(trailingRect.minY, y1)
-      bodyRect = NSRect(x: x0, y: y0, width: x1-x0, height: y1-y0)
+      let middleRects = Array(lineRects[1..<(lineRects.count-1)])
+      bodyRect = NSRect(unionOf: middleRects)
+      bodyRect.origin.y = min(leadingRect.maxY, bodyRect.minY)
+      bodyRect.size.height = max(trailingRect.minY, bodyRect.maxY) - bodyRect.minY
     }
 
     if extraSurounding > 0 {
@@ -764,5 +742,29 @@ private extension SquirrelView {
       layer.addSublayer(upLayer)
     }
     return (layer, downPath, upPath)
+  }
+}
+
+// MARK: - Rect Utilities
+
+private extension NSRect {
+  /// Returns a rectangle that is the union of all rectangles in the array.
+  /// Returns `.zero` if the array is empty.
+  init(unionOf rects: [NSRect]) {
+    guard let first = rects.first else {
+      self = .zero
+      return
+    }
+    var minX = first.minX
+    var maxX = first.maxX
+    var minY = first.minY
+    var maxY = first.maxY
+    for rect in rects.dropFirst() {
+      minX = Swift.min(rect.minX, minX)
+      maxX = Swift.max(rect.maxX, maxX)
+      minY = Swift.min(rect.minY, minY)
+      maxY = Swift.max(rect.maxY, maxY)
+    }
+    self.init(x: minX, y: minY, width: maxX - minX, height: maxY - minY)
   }
 }

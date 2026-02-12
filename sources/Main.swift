@@ -91,7 +91,9 @@ struct SquirrelApp {
     autoreleasepool {
       // find the bundle identifier and then initialize the input method server
       let main = Bundle.main
-      let connectionName = main.object(forInfoDictionaryKey: "InputMethodConnectionName") as! String
+      guard let connectionName = main.object(forInfoDictionaryKey: "InputMethodConnectionName") as? String else {
+        fatalError("Missing InputMethodConnectionName in Info.plist")
+      }
       _ = IMKServer(name: connectionName, bundleIdentifier: main.bundleIdentifier!)
       // load the bundle explicitly because in this case the input method is a
       // background only application

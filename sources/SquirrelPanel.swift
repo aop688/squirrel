@@ -229,7 +229,7 @@ final class SquirrelPanel: NSPanel {
         line.addAttributes(commentAttrs, range: convert(range: range, in: line.string))
       }
       line.mutableString.replaceOccurrences(of: "[label]", with: label, range: NSRange(location: 0, length: line.length))
-      let labeledLine = line.copy() as! NSAttributedString
+      guard let labeledLine = line.copy() as? NSAttributedString else { continue }
       line.mutableString.replaceOccurrences(of: "[candidate]", with: candidate, range: NSRange(location: 0, length: line.length))
       line.mutableString.replaceOccurrences(of: "[comment]", with: comment, range: NSRange(location: 0, length: line.length))
 
@@ -241,13 +241,13 @@ final class SquirrelPanel: NSPanel {
       if i > 0 {
         text.append(lineSeparator)
       }
-      let str = lineSeparator.mutableCopy() as! NSMutableAttributedString
+      guard let str = lineSeparator.mutableCopy() as? NSMutableAttributedString else { continue }
       if vertical {
         str.addAttribute(.verticalGlyphForm, value: 1, range: NSRange(location: 0, length: str.length))
       }
       view.separatorWidth = str.boundingRect(with: .zero).width
 
-      let paragraphStyleCandidate = (i == 0 ? theme.firstParagraphStyle : theme.paragraphStyle).mutableCopy() as! NSMutableParagraphStyle
+      guard let paragraphStyleCandidate = (i == 0 ? theme.firstParagraphStyle : theme.paragraphStyle).mutableCopy() as? NSMutableParagraphStyle else { continue }
       if linear {
         paragraphStyleCandidate.paragraphSpacingBefore -= theme.linespace
         paragraphStyleCandidate.lineSpacing = theme.linespace

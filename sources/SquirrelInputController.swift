@@ -376,11 +376,11 @@ private extension SquirrelInputController {
     let start = selRange.location
     let attrString = NSMutableAttributedString(string: preedit)
     if start > 0 {
-      let attrs = mark(forStyle: kTSMHiliteConvertedText, at: NSRange(location: 0, length: start))! as! [NSAttributedString.Key: Any]
+      guard let attrs = mark(forStyle: kTSMHiliteConvertedText, at: NSRange(location: 0, length: start)) as? [NSAttributedString.Key: Any] else { return }
       attrString.setAttributes(attrs, range: NSRange(location: 0, length: start))
     }
     let remainingRange = NSRange(location: start, length: preedit.utf16.count - start)
-    let attrs = mark(forStyle: kTSMHiliteSelectedRawText, at: remainingRange)! as! [NSAttributedString.Key: Any]
+    guard let attrs = mark(forStyle: kTSMHiliteSelectedRawText, at: remainingRange) as? [NSAttributedString.Key: Any] else { return }
     attrString.setAttributes(attrs, range: remainingRange)
     client.setMarkedText(attrString, selectionRange: NSRange(location: caretPos, length: 0), replacementRange: .empty)
   }

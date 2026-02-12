@@ -17,7 +17,9 @@ final class SquirrelInstaller {
   private lazy var inputSources: [String: TISInputSource] = {
     var inputSources = [String: TISInputSource]()
     var matchingSources = [InputMode: TISInputSource]()
-    let sourceList = TISCreateInputSourceList(nil, true).takeRetainedValue() as! [TISInputSource]
+    guard let sourceList = TISCreateInputSourceList(nil, true).takeRetainedValue() as? [TISInputSource] else {
+      return [:]
+    }
     for inputSource in sourceList {
       let sourceIDRef = TISGetInputSourceProperty(inputSource, kTISPropertyInputSourceID)
       guard let sourceID = unsafeBitCast(sourceIDRef, to: CFString?.self) as String? else { continue }
