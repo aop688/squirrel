@@ -263,7 +263,7 @@ Squirrel.app/Contents/MacOS/Squirrel --reload
 ### User Configuration
 - **User directory**: `~/Library/Rime/`
 - **Main config**: `squirrel.yaml`
-- **Log directory**: `/tmp/rime.squirrel/`
+- **Log directory**: `$TMPDIR/rime.squirrel/` (per-user temp dir: `$(getconf DARWIN_USER_TEMP_DIR)rime.squirrel`)
 
 ### Key Configuration Options
 
@@ -314,7 +314,7 @@ librime release. Changing them means replacing `librime/dist/lib/rime-plugins/` 
 
 ### Debugging Tips
 
-1. **Enable debug logging**: Check `/tmp/rime.squirrel/` for logs
+1. **Enable debug logging**: Check `$(getconf DARWIN_USER_TEMP_DIR)rime.squirrel/` for logs
 2. **Console.app**: Filter by "Squirrel" process
 3. **Reset configuration**: Delete `~/Library/Rime/` and redeploy
 4. Deploy start / success / failure are shown as system notifications (if the user allowed them);

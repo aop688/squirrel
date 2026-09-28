@@ -55,7 +55,6 @@ copy-plum-data:
 	@rm -rf data/plum
 	@mkdir -p data/plum/cn_dicts
 	# Copy only necessary prelude files
-	@cp plum/output/default.yaml data/plum/
 	@cp plum/output/key_bindings.yaml data/plum/
 	@cp plum/output/punctuation.yaml data/plum/
 	# Copy rime_ice files
@@ -63,15 +62,10 @@ copy-plum-data:
 	@cp data/rime_ice/rime_ice.dict.yaml data/plum/
 	@cp data/rime_ice/cn_dicts/*.dict.yaml data/plum/cn_dicts/
 	@cp $(RIME_PACKAGE_INSTALLER) bin/
-	# Patch default.yaml to only include rime_ice schema
-	@sed -i '' 's/^schema_list:/schema_list:\n  - schema: rime_ice/' data/plum/default.yaml
-	@sed -i '' '/- schema: luna_pinyin/d' data/plum/default.yaml
-	@sed -i '' '/- schema: luna_pinyin_simp/d' data/plum/default.yaml
-	@sed -i '' '/- schema: luna_pinyin_fluency/d' data/plum/default.yaml
-	@sed -i '' '/- schema: bopomofo/d' data/plum/default.yaml
-	@sed -i '' '/- schema: cangjie5/d' data/plum/default.yaml
-	@sed -i '' '/- schema: stroke/d' data/plum/default.yaml
-	@sed -i '' '/- schema: terra_pinyin/d' data/plum/default.yaml
+	# Replace the whole schema_list in default.yaml with rime_ice only
+	@awk '/^schema_list:/ { print; print "  - schema: rime_ice"; skip = 1; next } \
+		skip && /^[[:space:]]+-/ { next } \
+		{ skip = 0; print }' plum/output/default.yaml > data/plum/default.yaml
 	@echo "Done. Files in data/plum:"
 	@ls -1 data/plum/ | head -20
 

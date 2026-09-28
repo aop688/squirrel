@@ -81,13 +81,20 @@ final class SquirrelApplicationDelegate: NSObject, NSApplicationDelegate {
 
   static func showDeployNotification(_ message: String) {
     let center = UNUserNotificationCenter.current()
-    center.requestAuthorization(options: [.alert]) { granted, _ in
-      guard granted else { return }
+    center.requestAuthorization(options: [.alert]) { granted, error in
+      guard granted else {
+        NSLog("Squirrel: notifications not authorized: \(error.map { String(describing: $0) } ?? "denied by user")")
+        return
+      }
       let content = UNMutableNotificationContent()
       content.title = NSLocalizedString("Squirrel", comment: "Menu title")
       content.body = NSLocalizedString(message, comment: "Deploy status")
       // reuse the identifier so the result replaces the "deploying" notice
-      center.add(UNNotificationRequest(identifier: deployNotificationId, content: content, trigger: nil))
+      center.add(UNNotificationRequest(identifier: deployNotificationId, content: content, trigger: nil)) { error in
+        if let error {
+          NSLog("Squirrel: failed to post notification: \(String(describing: error))")
+        }
+      }
     }
   }
 
@@ -124,8 +131,10 @@ final class SquirrelApplicationDelegate: NSObject, NSApplicationDelegate {
 
 private func notificationHandler(contextObject: UnsafeMutableRawPointer?, sessionId: RimeSessionId, messageTypeC: UnsafePointer<CChar>?, messageValueC: UnsafePointer<CChar>?) {
   guard let messageTypeC, let messageValueC, String(cString: messageTypeC) == "deploy" else { return }
+  let value = String(cString: messageValueC)
+  NSLog("Squirrel: deploy \(value)")
   let message: String
-  switch String(cString: messageValueC) {
+  switch value {
   case "start":
     message = "deploy_start"
   case "success":
