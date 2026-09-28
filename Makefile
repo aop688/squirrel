@@ -151,9 +151,7 @@ clean:
 	rm data/plum/* > /dev/null 2>&1 || true
 
 clean-package:
-	rm -rf package/*appcast.xml > /dev/null 2>&1 || true
 	rm -rf package/*.pkg > /dev/null 2>&1 || true
-	rm -rf package/sign_update > /dev/null 2>&1 || true
 
 clean-deps:
 	$(MAKE) -C plum clean

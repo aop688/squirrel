@@ -89,7 +89,6 @@
   * LevelDB  (New BSD License)
   * librime  (New BSD License)
   * plum / 東風破 (GNU Lesser General Public License 3.0)
-  * Sparkle  (MIT License)
   * UTF8-CPP  (Boost Software License)
   * yaml-cpp  (MIT License)
 

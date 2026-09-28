@@ -21,15 +21,13 @@ This file contains essential information for AI coding agents working on the Squ
 ### Key Frameworks
 - `InputMethodKit`: macOS input method infrastructure
 - `AppKit`: UI components (NSPanel, NSTextView)
-- `Sparkle`: Automatic software updates
 - `UserNotifications`: System notifications
 - `Carbon`: Key code mappings (virtual key codes)
 - `QuartzCore`: Core Animation (CALayer, CAShapeLayer)
 
-### Dependencies (Git Submodules)
-- `librime/`: Rime input method engine (C++ library)
+### Dependencies (vendored in repo)
+- `librime/`: Rime input method engine (prebuilt headers and dylibs)
 - `plum/`: Rime configuration manager (東風破)
-- `Sparkle/`: Auto-update framework
 
 ## Project Structure
 
@@ -62,8 +60,7 @@ This file contains essential information for AI coding agents working on the Squ
 │   └── rime-plugins/           # Rime plugin dylibs
 ├── package/                    # Packaging scripts
 ├── scripts/                    # Installation scripts
-├── Squirrel.xcodeproj/         # Xcode project
-└── Frameworks/                 # 3rd-party frameworks (Sparkle)
+└── Squirrel.xcodeproj/         # Xcode project
 ```
 
 ## Architecture
@@ -293,13 +290,7 @@ Squirrel.app/Contents/MacOS/Squirrel --reload
 2. Build with `make package DEV_ID="..."`
 3. Notarization happens automatically via `xcrun notarytool`
 4. Staple ticket: `xcrun stapler staple package/Squirrel.pkg`
-5. Create archive with Sparkle appcast: `make archive`
-
-### Auto-Update (Sparkle)
-
-- **Feed URL**: `https://rime.github.io/release/squirrel/appcast.xml`
-- **Public Key**: Embedded in Info.plist (`SUPublicEDKey`)
-- **Enabled by default**: Users can disable in preferences
+5. Create versioned archive: `make archive`
 
 ## Common Development Tasks
 
@@ -336,7 +327,7 @@ bash install-plugins.sh user/repo
 ```bash
 # Clean everything and rebuild
 make clean clean-deps
-rm -rf build Frameworks librime/dist
+rm -rf build librime/dist
 
 # Re-initialize submodules
 git submodule update --init --recursive

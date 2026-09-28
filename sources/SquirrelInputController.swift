@@ -176,6 +176,10 @@ final class SquirrelInputController: IMKInputController {
     createSession()
   }
 
+  deinit {
+    destroySession()
+  }
+
   override func deactivateServer(_ sender: Any!) {
     // print("[DEBUG] deactivateServer: \(sender ?? "nil")")
     hidePalettes()

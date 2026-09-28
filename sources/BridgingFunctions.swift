@@ -27,7 +27,7 @@ extension DataSizeable {
     var value = valuePointer.move()
     valuePointer.deallocate()
     // Initialize data_size property
-    let offset = MemoryLayout.size(ofValue: \Self.data_size)
+    let offset = MemoryLayout<Int32>.size
     value.data_size = Int32(MemoryLayout<Self>.size - offset)
     return value
   }

@@ -4,7 +4,6 @@ Squirrel.xcodeproj/project.xcworkspace/
 Squirrel.xcodeproj/xcuserdata/
 build/
 build.log
-Frameworks/*
 bin/*
 lib/*
 data/opencc/
@@ -13,9 +12,6 @@ download/
 package/Squirrel*.pkg
 package/sign/*.pem
 package/test-*
-package/generate_keys
-package/sign_update
-package/*.xml
 *~
 .*.swp
 .DS_Store
