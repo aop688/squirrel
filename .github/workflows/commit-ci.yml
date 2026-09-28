@@ -11,8 +11,6 @@ jobs:
     steps:
       - name: Checkout last commit
         uses: actions/checkout@v6
-        with:
-          submodules: true
 
       - name: Install SwiftLint
         run: brew install swiftlint
