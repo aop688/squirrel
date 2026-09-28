@@ -12,18 +12,15 @@ final class SquirrelInstaller {
   enum InputMode: String, CaseIterable {
     static let primary = Self.hans
     case hans = "im.rime.inputmethod.Squirrel.Hans"
-    case hant = "im.rime.inputmethod.Squirrel.Hant"
   }
   private lazy var inputSources: [String: TISInputSource] = {
     var inputSources = [String: TISInputSource]()
-    var matchingSources = [InputMode: TISInputSource]()
     guard let sourceList = TISCreateInputSourceList(nil, true).takeRetainedValue() as? [TISInputSource] else {
       return [:]
     }
     for inputSource in sourceList {
       let sourceIDRef = TISGetInputSourceProperty(inputSource, kTISPropertyInputSourceID)
       guard let sourceID = unsafeBitCast(sourceIDRef, to: CFString?.self) as String? else { continue }
-      // print("[DEBUG] Examining input source: \(sourceID)")
       inputSources[sourceID] = inputSource
     }
     return inputSources

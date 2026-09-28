@@ -94,29 +94,6 @@
         }
       }
     },
-    "im.rime.inputmethod.Squirrel.Hant" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Squirrel - Traditional"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "鼠鬚管"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "鼠鬚管"
-          }
-        }
-      }
-    },
     "NSHumanReadableCopyright" : {
       "comment" : "Localized versions of Info.plist keys",
       "extractionState" : "manual",

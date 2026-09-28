@@ -34,7 +34,9 @@ extension DataSizeable {
 
   mutating func setCString(_ swiftString: String, to keypath: WritableKeyPath<Self, UnsafePointer<CChar>?>) {
     swiftString.withCString { cStr in
-      // Duplicate the string to create a persisting C string
+      // Duplicate the string to create a persisting C string.
+      // Intentionally never freed: traits are set up once per process and
+      // librime (glog) keeps pointers such as app_name for the process lifetime.
       let mutableCStr = strdup(cStr)
       // Free the existing string if there is one
       if let existing = self[keyPath: keypath] {

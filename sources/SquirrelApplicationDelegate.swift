@@ -6,11 +6,15 @@
 //
 
 import AppKit
+import UserNotifications
 
 final class SquirrelApplicationDelegate: NSObject, NSApplicationDelegate {
+  static let deployNotificationId = "SquirrelDeployNotification"
+
   let rimeAPI: RimeApi_stdbool = rime_get_api_stdbool().pointee
   var config: SquirrelConfig?
   var panel: SquirrelPanel?
+  private(set) var isRimeRunning = false
 
   func applicationWillFinishLaunching(_ notification: Notification) {
     panel = SquirrelPanel(position: .zero)
@@ -58,13 +62,32 @@ final class SquirrelApplicationDelegate: NSObject, NSApplicationDelegate {
   func startRime(fullCheck: Bool) {
     print("Initializing la rime...")
     rimeAPI.initialize(nil)
+    isRimeRunning = true
     // check for configuration updates
     if rimeAPI.start_maintenance(fullCheck) {
       // update squirrel config
-      // print("[DEBUG] maintenance suceeds")
       _ = rimeAPI.deploy_config_file("squirrel.yaml", "config_version")
-    } else {
-      // print("[DEBUG] maintenance fails")
+    }
+  }
+
+  // Rime is finalized before logout; restart it if the logout was cancelled.
+  func ensureRimeRunning() {
+    if !isRimeRunning {
+      print("Restarting rime.")
+      startRime(fullCheck: false)
+      loadSettings()
+    }
+  }
+
+  static func showDeployNotification(_ message: String) {
+    let center = UNUserNotificationCenter.current()
+    center.requestAuthorization(options: [.alert]) { granted, _ in
+      guard granted else { return }
+      let content = UNMutableNotificationContent()
+      content.title = NSLocalizedString("Squirrel", comment: "Menu title")
+      content.body = NSLocalizedString(message, comment: "Deploy status")
+      // reuse the identifier so the result replaces the "deploying" notice
+      center.add(UNNotificationRequest(identifier: deployNotificationId, content: content, trigger: nil))
     }
   }
 
@@ -100,17 +123,26 @@ final class SquirrelApplicationDelegate: NSObject, NSApplicationDelegate {
 }
 
 private func notificationHandler(contextObject: UnsafeMutableRawPointer?, sessionId: RimeSessionId, messageTypeC: UnsafePointer<CChar>?, messageValueC: UnsafePointer<CChar>?) {
-  _ = contextObject
-  _ = sessionId
-  _ = messageTypeC
-  _ = messageValueC
-  // All notifications removed in lite version
+  guard let messageTypeC, let messageValueC, String(cString: messageTypeC) == "deploy" else { return }
+  let message: String
+  switch String(cString: messageValueC) {
+  case "start":
+    message = "deploy_start"
+  case "success":
+    message = "deploy_success"
+  case "failure":
+    message = "deploy_failure"
+  default:
+    return
+  }
+  SquirrelApplicationDelegate.showDeployNotification(message)
 }
 
 private extension SquirrelApplicationDelegate {
   func shutdownRime() {
     config?.close()
     rimeAPI.finalize()
+    isRimeRunning = false
   }
 
   func workspaceWillPowerOff(_: Notification) {

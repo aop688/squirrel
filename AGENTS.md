@@ -6,7 +6,9 @@ This file contains essential information for AI coding agents working on the Squ
 
 **Squirrel (鼠鬚管)** is a macOS input method editor (IME) powered by the [Rime Input Method Engine](https://rime.im). It provides an intelligent, customizable Chinese input experience for macOS users.
 
-- **Bundle ID**: `im.rime.inputmethod.Squirrel`
+- **Bundle ID**: `im.rime.inputmethod.Squirrel` (same as upstream on purpose: this build replaces the
+  official Squirrel and cannot be installed alongside it)
+- **Input mode**: a single mode, `im.rime.inputmethod.Squirrel.Hans`
 - **Minimum macOS Version**: macOS 13.0+
 - **License**: GPL v3
 - **Primary Language**: Swift (with C/Objective-C bridging)
@@ -21,6 +23,7 @@ This file contains essential information for AI coding agents working on the Squ
 ### Key Frameworks
 - `InputMethodKit`: macOS input method infrastructure
 - `AppKit`: UI components (NSPanel, NSTextView)
+- `UserNotifications`: deploy start / success / failure notifications
 - `Carbon`: Key code mappings (virtual key codes)
 - `QuartzCore`: Core Animation (CALayer, CAShapeLayer)
 
@@ -314,7 +317,10 @@ librime release. Changing them means replacing `librime/dist/lib/rime-plugins/` 
 1. **Enable debug logging**: Check `/tmp/rime.squirrel/` for logs
 2. **Console.app**: Filter by "Squirrel" process
 3. **Reset configuration**: Delete `~/Library/Rime/` and redeploy
-4. There are no deploy/status notifications; check the log directory after a deploy
+4. Deploy start / success / failure are shown as system notifications (if the user allowed them);
+   on failure, check the log directory
+5. Before logout Rime is finalized; if the logout is cancelled, the next key event restarts it
+   (`SquirrelApplicationDelegate.ensureRimeRunning()`)
 
 ## Troubleshooting
 

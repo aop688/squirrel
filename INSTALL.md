@@ -1,142 +1,86 @@
 # How to Rime with Squirrel
 
-> Instructions to build Squirrel - the Rime frontend for macOS
+> Instructions to build this Squirrel fork - the Rime frontend for macOS
+
+## Build in the cloud
+
+Every push to GitHub runs `commit-ci.yml`, which builds `Squirrel.pkg` and a zipped
+`Squirrel.app` and uploads them as workflow artifacts (kept for 90 days). You can also
+start it manually from the Actions page ("commit ci" → "Run workflow").
+
+Pushing a tag runs `release-ci.yml`, which creates a draft GitHub release with
+`Squirrel-<version>.pkg`.
 
 ## Manually build and install Squirrel
 
 ### Prerequisites
 
-Install **Xcode 14.0** or above from App Store, to build Squirrel as a Universal
-app.
-
-Install **cmake**.
-
-Download from https://cmake.org/download/
-
-or install from [Homebrew](http://brew.sh/):
+Install **Xcode** from the App Store and select it (Command Line Tools alone are not enough,
+`xcodebuild` is required):
 
 ``` sh
-brew install cmake
+sudo xcode-select -s /Applications/Xcode.app
 ```
 
-or install from [MacPorts](https://www.macports.org/):
-
-``` sh
-port install cmake
-```
+Only Apple Silicon (arm64) builds are supported. CMake and Boost are **not** needed:
+librime is vendored as prebuilt binaries in `librime/dist`.
 
 ### Checkout the code
 
 ``` sh
-git clone --recursive https://github.com/rime/squirrel.git
+git clone https://github.com/aop688/squirrel.git
 
 cd squirrel
 ```
 
-Optionally, checkout Rime plugins (a list of GitHub repo slugs):
+There are no git submodules; librime and plum are part of the repository.
+
+### Prepare dependencies
 
 ``` sh
-bash librime/install-plugins.sh rime/librime-sample # ...
+./action-install.sh
 ```
 
-Popular plugins include [librime-lua](https://github.com/hchunhui/librime-lua), [librime-octagram](https://github.com/lotem/librime-octagram) and [librime-predict](https://github.com/rime/librime-predict)
+This copies librime into `lib/` and `bin/`, and generates the bundled data in `data/plum/`
+(the `prelude` package is fetched from GitHub by plum, then the rime_ice schema from
+`data/rime_ice/` is added).
 
-### Shortcut: get the latest librime release
-
-You have the option to skip the following two sections - building Boost and
-librime, by downloading the latest librime binary from GitHub releases.
+To upgrade librime, edit `rime_version` and `rime_git_hash` in `action-install.sh`, then run:
 
 ``` sh
-bash ./action-install.sh
+update_librime=1 ./action-install.sh
 ```
 
-When this is done, you may move on to [Build Squirrel](#build-squirrel).
-
-### Install Boost C++ libraries
-
-Choose one of the following options.
-
-**Option:** Download and install from source.
-
-``` sh
-export BUILD_UNIVERSAL=1
-
-bash librime/install-boost.sh
-
-export BOOST_ROOT="$(pwd)/librime/deps/boost-1.84.0"
-```
-
-Let's set `BUILD_UNIVERSAL` to tell `make` that we are building Boost as
-universal macOS binaries. Skip this if building only for the native architecture.
-
-After Boost source code is downloaded and a few compiled libraries are built,
-be sure to set shell variable `BOOST_ROOT` to its top level directory as above.
-
-You may also set `BOOST_ROOT` to an existing Boost source tree before this step.
-
-**Option:** Install the current version form Homebrew:
-
-``` sh
-brew install boost
-```
-
-**Note:** with this option, the built Squirrel.app is not portable because it
-links to locally installed libraries from Homebrew.
-
-Learn more about the implications of this at
-https://github.com/rime/librime/blob/master/README-mac.md#install-boost-c-libraries
-
-**Option:** Install from [MacPorts](https://www.macports.org/):
-
-``` sh
-port install boost -no_static
-```
+and commit the updated `librime/dist`.
 
 ### Build Squirrel
 
-* Make sure you have updated all the dependencies. If you cloned squirrel with the command in this guide, you've already done it. But if not, this command will update submodules.
-
+``` sh
+make            # same as: make release
+make debug      # debug build
 ```
-git submodule update --init --recursive
-```
 
-* There are a few environmental variables that you can define. Here's a list and possible values they may take:
+Optional environment variables:
 
 ``` sh
-export BOOST_ROOT="path_to_boost" # required
-export DEV_ID="Your Apple ID name" # include this to codesign, optional
-export BUILD_UNIVERSAL=1 # set to build universal binary
-export PLUM_TAG=":preset” # or ":extra", optional, build with a set of plum formulae
-export ARCHS='arm64 x86_64' # optional, if not defined, only active arch is used
-export MACOSX_DEPLOYMENT_TARGET='13.0' # optional, lower version than 13.0 is not tested and may not work properly
-```
-
-* With all dependencies ready, build `Squirrel.app`:
-
-``` sh
-make
-```
-
-* You can either define the environment variables in your shell/terminal, or append them as arguments to the make command. For example:
-
-``` sh
-# for Universal macOS App
-make ARCHS='arm64 x86_64' BUILD_UNIVERSAL=1
+export DEV_ID="Your Apple ID name" # include this to codesign and notarize, optional
+export MACOSX_DEPLOYMENT_TARGET='13.0' # optional, lower version than 13.0 is not tested
 ```
 
 ## Install it on your Mac
 
+This build replaces the official Squirrel: it uses the same bundle ID and install location,
+so the two cannot be installed side by side.
+
 ### Make Package
 
-Just add `package` after `make`
-
-```
-make package ARCHS='arm64'
+``` sh
+make package
 ```
 
 Define `DEV_ID` to automatically handle code signing and [notarization](https://developer.apple.com/documentation/security/notarizing_macos_software_before_distribution) (Apple Developer ID needed)
 
-To make this work, you need a `Developer ID Installer: (your name/org)` and set your name/org as `DEV_ID` env variable. 
+To make this work, you need a `Developer ID Installer: (your name/org)` and set your name/org as `DEV_ID` env variable.
 
 To make notarization work, you also need to save your credential under the same name as above.
 
@@ -146,6 +90,13 @@ xcrun notarytool store-credentials 'your name/org'
 
 You **don't** need to define `DEV_ID` if you don't intend to distribute the package.
 
+An unsigned package downloaded from the internet is blocked by Gatekeeper; remove the
+quarantine flag before opening it:
+
+``` sh
+xattr -dr com.apple.quarantine Squirrel.pkg
+```
+
 ### Directly Install
 
 **You might need to precede with sudo, and without a logout, the App might not work properly. Direct install is not very recommended.**
@@ -153,7 +104,6 @@ You **don't** need to define `DEV_ID` if you don't intend to distribute the pack
 Once built, you can install and try it live on your Mac computer:
 
 ``` sh
-# Squirrel as a Universal app
 make install
 ```
 

@@ -48,9 +48,6 @@ $(PLUM_DATA):
 
 plum-data:
 	$(MAKE) -C plum
-ifdef PLUM_TAG
-	rime_dir=plum/output bash plum/rime-install $(PLUM_TAG)
-endif
 	$(MAKE) copy-plum-data
 
 copy-plum-data:
