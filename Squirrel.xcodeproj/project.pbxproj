@@ -7,13 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2C6B9F9D2BCD086700E327DF /* librime-lua.dylib in Copy Rime plugins */ = {isa = PBXBuildFile; fileRef = 2C6B9F9A2BCD086700E327DF /* librime-lua.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		2C6B9F9E2BCD086700E327DF /* librime-octagram.dylib in Copy Rime plugins */ = {isa = PBXBuildFile; fileRef = 2C6B9F9B2BCD086700E327DF /* librime-octagram.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		2C6B9F9F2BCD086700E327DF /* librime-predict.dylib in Copy Rime plugins */ = {isa = PBXBuildFile; fileRef = 2C6B9F9C2BCD086700E327DF /* librime-predict.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		441E638122B7E96F006DCCDD /* rime_ice.schema.yaml in Copy Shared Support Files */ = {isa = PBXBuildFile; fileRef = 441E638222B7E90C006DCCDD /* rime_ice.schema.yaml */; };
 		441E638522B7E96F006DCCDD /* cn_dicts in Copy Shared Support Files */ = {isa = PBXBuildFile; fileRef = 441E638622B7E90C006DCCDD /* cn_dicts */; };
 		441E638322B7E96F006DCCDD /* rime_ice.dict.yaml in Copy Shared Support Files */ = {isa = PBXBuildFile; fileRef = 441E638422B7E90C006DCCDD /* rime_ice.dict.yaml */; };
-		442C64921F7A410A0027EFBE /* rime-install in CopyFiles */ = {isa = PBXBuildFile; fileRef = 442C64901F7A404A0027EFBE /* rime-install */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		446C01D71F767BD400A6C23E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 446C01D61F767BD400A6C23E /* Assets.xcassets */; };
 		44986A95184B421700B3278D /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = 44986A93184B421700B3278D /* LICENSE.txt */; };
 		44986A96184B421700B3278D /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 44986A94184B421700B3278D /* README.md */; };
@@ -42,19 +38,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		2C6B9F992BCD083D00E327DF /* Copy Rime plugins */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "rime-plugins";
-			dstSubfolderSpec = 10;
-			files = (
-				2C6B9F9D2BCD086700E327DF /* librime-lua.dylib in Copy Rime plugins */,
-				2C6B9F9E2BCD086700E327DF /* librime-octagram.dylib in Copy Rime plugins */,
-				2C6B9F9F2BCD086700E327DF /* librime-predict.dylib in Copy Rime plugins */,
-			);
-			name = "Copy Rime plugins";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		44DA7A1614DD581B00C1ED3B /* Copy Shared Support Files */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -77,7 +60,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 6;
 			files = (
-				442C64921F7A410A0027EFBE /* rime-install in CopyFiles */,
 				44E21A9016A653E700C2B08F /* rime_deployer in CopyFiles */,
 				44E21A9116A653E700C2B08F /* rime_dict_manager in CopyFiles */,
 			);
@@ -100,23 +82,19 @@
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
-		2C6B9F9A2BCD086700E327DF /* librime-lua.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "librime-lua.dylib"; path = "lib/rime-plugins/librime-lua.dylib"; sourceTree = "<group>"; };
-		2C6B9F9B2BCD086700E327DF /* librime-octagram.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "librime-octagram.dylib"; path = "lib/rime-plugins/librime-octagram.dylib"; sourceTree = "<group>"; };
-		2C6B9F9C2BCD086700E327DF /* librime-predict.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "librime-predict.dylib"; path = "lib/rime-plugins/librime-predict.dylib"; sourceTree = "<group>"; };
-		441E638222B7E90C006DCCDD /* rime_ice.schema.yaml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = rime_ice.schema.yaml; path = data/plum/rime_ice.schema.yaml; sourceTree = "<group>"; };
-		441E638622B7E90C006DCCDD /* cn_dicts */ = {isa = PBXFileReference; lastKnownFileType = folder; name = cn_dicts; path = data/plum/cn_dicts; sourceTree = "<group>"; };
-		441E638422B7E90C006DCCDD /* rime_ice.dict.yaml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = rime_ice.dict.yaml; path = data/plum/rime_ice.dict.yaml; sourceTree = "<group>"; };
-		442C64901F7A404A0027EFBE /* rime-install */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = "rime-install"; path = "bin/rime-install"; sourceTree = "<group>"; };
+		441E638222B7E90C006DCCDD /* rime_ice.schema.yaml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = rime_ice.schema.yaml; path = data/rime_ice/rime_ice.schema.yaml; sourceTree = "<group>"; };
+		441E638622B7E90C006DCCDD /* cn_dicts */ = {isa = PBXFileReference; lastKnownFileType = folder; name = cn_dicts; path = data/rime_ice/cn_dicts; sourceTree = "<group>"; };
+		441E638422B7E90C006DCCDD /* rime_ice.dict.yaml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = rime_ice.dict.yaml; path = data/rime_ice/rime_ice.dict.yaml; sourceTree = "<group>"; };
 		446C01D61F767BD400A6C23E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		44986A93184B421700B3278D /* LICENSE.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
 		44986A94184B421700B3278D /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
-		44AEBC7121F569CF00344375 /* punctuation.yaml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = punctuation.yaml; path = data/plum/punctuation.yaml; sourceTree = "<group>"; };
-		44AEBC7221F569CF00344375 /* key_bindings.yaml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = key_bindings.yaml; path = data/plum/key_bindings.yaml; sourceTree = "<group>"; };
+		44AEBC7121F569CF00344375 /* punctuation.yaml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = punctuation.yaml; path = data/prelude/punctuation.yaml; sourceTree = "<group>"; };
+		44AEBC7221F569CF00344375 /* key_bindings.yaml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = key_bindings.yaml; path = data/prelude/key_bindings.yaml; sourceTree = "<group>"; };
 		44CD640915E2633D0021234E /* librime.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = librime.1.dylib; path = lib/librime.1.dylib; sourceTree = "<group>"; };
 		44E21A8E16A653E700C2B08F /* rime_deployer */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = rime_deployer; path = bin/rime_deployer; sourceTree = "<group>"; };
 		44E21A8F16A653E700C2B08F /* rime_dict_manager */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = rime_dict_manager; path = bin/rime_dict_manager; sourceTree = "<group>"; };
 		44F1EB381431F8270015FD04 /* Squirrel.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Squirrel.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		7B5488211D2DAAD10056A1BE /* default.yaml */ = {isa = PBXFileReference; lastKnownFileType = text; name = default.yaml; path = data/plum/default.yaml; sourceTree = "<group>"; };
+		7B5488211D2DAAD10056A1BE /* default.yaml */ = {isa = PBXFileReference; lastKnownFileType = text; name = default.yaml; path = data/prelude/default.yaml; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = resources/Info.plist; sourceTree = "<group>"; };
 		A4B8E1B20F645B870094E08B /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		B3216E5B2BF438F800E292D2 /* rime.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = rime.pdf; path = resources/rime.pdf; sourceTree = "<group>"; };
@@ -201,9 +179,6 @@
 		29B97314FDCFA39411CA2CEA /* Squirrel */ = {
 			isa = PBXGroup;
 			children = (
-				2C6B9F9A2BCD086700E327DF /* librime-lua.dylib */,
-				2C6B9F9B2BCD086700E327DF /* librime-octagram.dylib */,
-				2C6B9F9C2BCD086700E327DF /* librime-predict.dylib */,
 				442C648F1F7A40180027EFBE /* bin */,
 				44DA7A4214DD598900C1ED3B /* SharedSupport */,
 				080E96DDFE201D6D7F000001 /* Sources */,
@@ -245,7 +220,6 @@
 		442C648F1F7A40180027EFBE /* bin */ = {
 			isa = PBXGroup;
 			children = (
-				442C64901F7A404A0027EFBE /* rime-install */,
 				44E21A8E16A653E700C2B08F /* rime_deployer */,
 				44E21A8F16A653E700C2B08F /* rime_dict_manager */,
 			);
@@ -255,12 +229,12 @@
 		44DA7A4214DD598900C1ED3B /* SharedSupport */ = {
 			isa = PBXGroup;
 			children = (
-				7B5488A71D2DAC9D0056A1BE /* plum */,
+				7B5488A71D2DAC9D0056A1BE /* data */,
 			);
 			name = SharedSupport;
 			sourceTree = "<group>";
 		};
-		7B5488A71D2DAC9D0056A1BE /* plum */ = {
+		7B5488A71D2DAC9D0056A1BE /* data */ = {
 			isa = PBXGroup;
 			children = (
 				441E638422B7E90C006DCCDD /* rime_ice.dict.yaml */,
@@ -270,7 +244,7 @@
 				44AEBC7221F569CF00344375 /* key_bindings.yaml */,
 				44AEBC7121F569CF00344375 /* punctuation.yaml */,
 			);
-			name = plum;
+			name = data;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -284,7 +258,6 @@
 				8D11072C0486CEB800E47090 /* Sources */,
 				8D11072E0486CEB800E47090 /* Frameworks */,
 				A464E3780F65263000148227 /* Copy 3rd-party Frameworks */,
-				2C6B9F992BCD083D00E327DF /* Copy Rime plugins */,
 				44DA7A1614DD581B00C1ED3B /* Copy Shared Support Files */,
 				44E21A8D16A653AC00C2B08F /* CopyFiles */,
 			);

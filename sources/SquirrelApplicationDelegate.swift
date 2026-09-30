@@ -13,11 +13,11 @@ final class SquirrelApplicationDelegate: NSObject, NSApplicationDelegate {
 
   let rimeAPI: RimeApi_stdbool = rime_get_api_stdbool().pointee
   var config: SquirrelConfig?
-  var panel: SquirrelPanel?
+  // created eagerly: main() loads settings into it before the run loop starts
+  let panel = SquirrelPanel(position: .zero)
   private(set) var isRimeRunning = false
 
   func applicationWillFinishLaunching(_ notification: Notification) {
-    panel = SquirrelPanel(position: .zero)
     addObservers()
   }
 
@@ -25,7 +25,7 @@ final class SquirrelApplicationDelegate: NSObject, NSApplicationDelegate {
     // swiftlint:disable:next notification_center_detachment
     NotificationCenter.default.removeObserver(self)
     DistributedNotificationCenter.default().removeObserver(self)
-    panel?.hide()
+    panel.hide()
   }
 
   func deploy() {
@@ -99,15 +99,13 @@ final class SquirrelApplicationDelegate: NSObject, NSApplicationDelegate {
   }
 
   func loadSettings() {
-    config = SquirrelConfig()
-    if !config!.openBaseConfig() {
+    let config = SquirrelConfig()
+    self.config = config
+    if !config.openBaseConfig() {
       return
     }
-
-    if let panel = panel, let config = self.config {
-      panel.load(config: config, forDarkMode: false)
-      panel.load(config: config, forDarkMode: true)
-    }
+    panel.load(config: config, forDarkMode: false)
+    panel.load(config: config, forDarkMode: true)
   }
 
   // add an awakeFromNib item so that we can set the action method.  Note that

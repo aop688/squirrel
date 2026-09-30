@@ -33,7 +33,7 @@ git clone https://github.com/aop688/squirrel.git
 cd squirrel
 ```
 
-There are no git submodules; librime and plum are part of the repository.
+There are no git submodules; librime and all bundled data are part of the repository.
 
 ### Prepare dependencies
 
@@ -41,9 +41,8 @@ There are no git submodules; librime and plum are part of the repository.
 ./action-install.sh
 ```
 
-This copies librime into `lib/` and `bin/`, and generates the bundled data in `data/plum/`
-(the `prelude` package is fetched from GitHub by plum, then the rime_ice schema from
-`data/rime_ice/` is added).
+This copies librime into `lib/` and `bin/`. No network access is needed: the bundled data
+(`data/prelude/` and `data/rime_ice/`) is tracked and copied into the app by Xcode.
 
 To upgrade librime, edit `rime_version` and `rime_git_hash` in `action-install.sh`, then run:
 
@@ -117,7 +116,7 @@ To clean **Squirrel** artifacts, without touching dependencies, run:
 make clean
 ```
 
-To clean up **dependencies** (plum output and the librime download cache; the vendored `librime/dist` is kept), run:
+To clean up **dependencies** (the librime download cache; the vendored `librime/dist` is kept), run:
 
 ``` sh
 make clean-deps

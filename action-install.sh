@@ -24,10 +24,8 @@ if [ -n "${update_librime}" ]; then
 
     # merges into librime/dist, keeping vendored extra headers (rime/key_table.h, X11/)
     cp -R download/dist librime/
+    # the bundled schema uses no plugins
+    rm -rf librime/dist/lib/rime-plugins
 fi
 
 make copy-rime-binaries
-
-# install Rime recipes
-rime_dir=plum/output bash plum/rime-install
-make copy-plum-data

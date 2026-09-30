@@ -10,13 +10,8 @@ DERIVED_DATA_PATH = build
 RIME_LIBRARY_FILE_NAME = librime.1.dylib
 RIME_LIBRARY = lib/$(RIME_LIBRARY_FILE_NAME)
 
-PLUM_DATA = bin/rime-install \
-	data/plum/default.yaml
 PACKAGE = package/Squirrel.pkg
-DEPS_CHECK = $(RIME_LIBRARY) $(PLUM_DATA)
-
-PLUM_DATA_OUTPUT = plum/output/*.*
-RIME_PACKAGE_INSTALLER = plum/rime-install
+DEPS_CHECK = $(RIME_LIBRARY)
 
 INSTALL_NAME_TOOL = $(shell xcrun -find install_name_tool)
 INSTALL_NAME_TOOL_ARGS = -add_rpath @loader_path/../Frameworks
@@ -33,43 +28,12 @@ librime:
 copy-rime-binaries:
 	mkdir -p lib bin
 	cp -L $(RIME_LIB_DIR)/$(RIME_LIBRARY_FILE_NAME) lib/
-	cp -pR $(RIME_LIB_DIR)/rime-plugins lib/
 	cp $(RIME_BIN_DIR)/rime_deployer bin/
 	cp $(RIME_BIN_DIR)/rime_dict_manager bin/
 	$(INSTALL_NAME_TOOL) $(INSTALL_NAME_TOOL_ARGS) bin/rime_deployer
 	$(INSTALL_NAME_TOOL) $(INSTALL_NAME_TOOL_ARGS) bin/rime_dict_manager
 
-.PHONY: data plum-data copy-plum-data
-
-data: plum-data
-
-$(PLUM_DATA):
-	$(MAKE) plum-data
-
-plum-data:
-	$(MAKE) -C plum
-	$(MAKE) copy-plum-data
-
-copy-plum-data:
-	@echo "Copying minimal data files..."
-	@rm -rf data/plum
-	@mkdir -p data/plum/cn_dicts
-	# Copy only necessary prelude files
-	@cp plum/output/key_bindings.yaml data/plum/
-	@cp plum/output/punctuation.yaml data/plum/
-	# Copy rime_ice files
-	@cp data/rime_ice/rime_ice.schema.yaml data/plum/
-	@cp data/rime_ice/rime_ice.dict.yaml data/plum/
-	@cp data/rime_ice/cn_dicts/*.dict.yaml data/plum/cn_dicts/
-	@cp $(RIME_PACKAGE_INSTALLER) bin/
-	# Replace the whole schema_list in default.yaml with rime_ice only
-	@awk '/^schema_list:/ { print; print "  - schema: rime_ice"; skip = 1; next } \
-		skip && /^[[:space:]]+-/ { next } \
-		{ skip = 0; print }' plum/output/default.yaml > data/plum/default.yaml
-	@echo "Done. Files in data/plum:"
-	@ls -1 data/plum/ | head -20
-
-deps: librime data
+deps: librime
 
 # Only support Apple Silicon (arm64)
 ARCHS = arm64
@@ -136,12 +100,9 @@ clean:
 	rm build.log > /dev/null 2>&1 || true
 	rm bin/* > /dev/null 2>&1 || true
 	rm lib/* > /dev/null 2>&1 || true
-	rm lib/rime-plugins/* > /dev/null 2>&1 || true
-	rm data/plum/* > /dev/null 2>&1 || true
 
 clean-package:
 	rm -rf package/*.pkg > /dev/null 2>&1 || true
 
 clean-deps:
-	$(MAKE) -C plum clean
 	rm -rf download > /dev/null 2>&1 || true

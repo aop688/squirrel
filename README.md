@@ -61,6 +61,8 @@
 
 使用 [/plum/](https://github.com/rime/plum) 配置管理器獲取更多輸入方案。
 
+注意：本版本未附帶 librime-lua / octagram / predict 插件，依賴這些插件的方案（如完整版雾凇拼音）無法使用。
+
 致謝
 ---
 
@@ -96,7 +98,7 @@
   * Google Test  (New BSD License)
   * LevelDB  (New BSD License)
   * librime  (New BSD License)
-  * plum / 東風破 (GNU Lesser General Public License 3.0)
+  * rime-prelude (GNU Lesser General Public License 3.0)
   * UTF8-CPP  (Boost Software License)
   * yaml-cpp  (MIT License)
 

@@ -180,7 +180,7 @@ final class SquirrelInputController: IMKInputController {
   }
 
   override func hidePalettes() {
-    NSApp.squirrelAppDelegate.panel?.hide()
+    NSApp.squirrelAppDelegate.panel.hide()
     super.hidePalettes()
   }
 
@@ -248,14 +248,13 @@ private extension SquirrelInputController {
     // TODO add special key event preprocessing here
 
     // with linear candidate list, arrow keys may behave differently.
-    if let panel = NSApp.squirrelAppDelegate.panel {
-      if panel.linear != rimeAPI.get_option(session, "_linear") {
-        rimeAPI.set_option(session, "_linear", panel.linear)
-      }
-      // with vertical text, arrow keys may behave differently.
-      if panel.vertical != rimeAPI.get_option(session, "_vertical") {
-        rimeAPI.set_option(session, "_vertical", panel.vertical)
-      }
+    let panel = NSApp.squirrelAppDelegate.panel
+    if panel.linear != rimeAPI.get_option(session, "_linear") {
+      rimeAPI.set_option(session, "_linear", panel.linear)
+    }
+    // with vertical text, arrow keys may behave differently.
+    if panel.vertical != rimeAPI.get_option(session, "_vertical") {
+      rimeAPI.set_option(session, "_vertical", panel.vertical)
     }
 
     let handled = rimeAPI.process_key(session, Int32(rimeKeycode), Int32(rimeModifiers))
@@ -285,11 +284,10 @@ private extension SquirrelInputController {
       if let schema_id = status.schema_id, schemaId == "" || schemaId != String(cString: schema_id) {
         schemaId = String(cString: schema_id)
         // inline preedit
-        if let panel = NSApp.squirrelAppDelegate.panel {
-          inlinePreedit = (panel.inlinePreedit && !rimeAPI.get_option(session, "no_inline")) || rimeAPI.get_option(session, "inline")
-          // if not inline, embed soft cursor in preedit string
-          rimeAPI.set_option(session, "soft_cursor", !inlinePreedit)
-        }
+        let panel = NSApp.squirrelAppDelegate.panel
+        inlinePreedit = (panel.inlinePreedit && !rimeAPI.get_option(session, "no_inline")) || rimeAPI.get_option(session, "inline")
+        // if not inline, embed soft cursor in preedit string
+        rimeAPI.set_option(session, "soft_cursor", !inlinePreedit)
       }
       _ = rimeAPI.free_status(&status)
     }
@@ -380,11 +378,10 @@ private extension SquirrelInputController {
     guard let client = client else { return }
     var inputPos = NSRect()
     client.attributes(forCharacterIndex: 0, lineHeightRectangle: &inputPos)
-    if let panel = NSApp.squirrelAppDelegate.panel {
-      panel.position = inputPos
-      panel.inputController = self
-      panel.update(preedit: preedit, selRange: selRange, caretPos: caretPos, candidates: candidates, comments: comments, labels: labels,
-                   highlighted: highlighted, page: page, lastPage: lastPage, update: true)
-    }
+    let panel = NSApp.squirrelAppDelegate.panel
+    panel.position = inputPos
+    panel.inputController = self
+    panel.update(preedit: preedit, selRange: selRange, caretPos: caretPos, candidates: candidates, comments: comments, labels: labels,
+                 highlighted: highlighted, page: page, lastPage: lastPage, update: true)
   }
 }
