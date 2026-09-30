@@ -2,7 +2,7 @@ name: commit ci
 on:
   push:
     branches:
-      - '*'
+      - '**'
   workflow_dispatch:
 
 jobs:
