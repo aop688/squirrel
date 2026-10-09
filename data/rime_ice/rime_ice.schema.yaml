@@ -52,9 +52,9 @@ translator:
   always_show_comments: true
   initial_quality: 1.2
   preedit_format:
-    - xform/([jqxy])v/\$1u/
-    - xform/([nl])v/\$1v/
-    - xform/([nl])ue/\$1ve/
+    - xform/([jqxy])v/$1u/
+    - xform/([nl])v/$1ü/
+    - xform/([nl])ue/$1üe/
     - xform/(?<=[A-Z])\s(?=[A-Z])//
 
 # 标点符号
@@ -80,10 +80,10 @@ speller:
     - erase/^m$/
     - erase/^n$/
     - erase/^ng$/
-    - abbrev/^([a-z]).+$/\$1/
-    - abbrev/^([zcs]h).+$/\$1/
+    - abbrev/^([a-z]).+$/$1/
+    - abbrev/^([zcs]h).+$/$1/
     # v u 转换
-    - derive/^([nl])ve$/\$1ue/
-    - derive/^([jqxy])u/\$1v/
-    - derive/^([nl])ue$/\$1ve/
-    - derive/^([jqxy])v/\$1u/
+    - derive/^([nl])ve$/$1ue/
+    - derive/^([jqxy])u/$1v/
+    - derive/^([nl])ue$/$1ve/
+    - derive/^([jqxy])v/$1u/
