@@ -33,7 +33,9 @@ This file contains essential information for AI coding agents working on the Squ
   (not in the upstream release archive, required by the bridging header).
 - `data/prelude/`: `default.yaml`, `key_bindings.yaml`, `punctuation.yaml` from
   [rime-prelude](https://github.com/rime/rime-prelude) (`082425e`); `default.yaml`'s `schema_list` is cut to `rime_ice`.
-- `data/rime_ice/`: the only bundled input schema (雾凇拼音, simplified Chinese).
+- `data/rime_ice/`: the only bundled input schema (雾凇拼音, simplified Chinese), a lite cut of
+  [rime-ice](https://github.com/iDvel/rime-ice). `cn_dicts/{8105,base,others}` are synced from upstream (`da1fbe6`);
+  `ext`/`tencent` are not bundled. The schema is trimmed locally, so do not overwrite it with upstream's.
 
 ## Project Structure
 
@@ -248,6 +250,28 @@ make install-debug
 
 # Force reload after changes
 Squirrel.app/Contents/MacOS/Squirrel --reload
+```
+
+### Resource Usage Baseline
+
+Measured 2026-10-09 on the installed build (1.1.2, arm64) after 10 days of uptime. Use it as a reference
+when checking for regressions.
+
+| Metric | Value | Notes |
+|---|---|---|
+| Physical footprint | 18 MB (peak 18.6 MB) | What Activity Monitor shows; ~12 MB of it is malloc (librime sessions/caches) |
+| RSS | 60 MB | Includes shared system libraries and clean mmap pages |
+| Dictionary mmap | ~13.6 MB resident | `rime_ice.table.bin` (17 MB) is mapped read-only and reclaimable, not counted in footprint |
+| CPU | 0.0% idle, 50 s total over 10 days | 4 threads, energy impact 0.0 |
+| App bundle on disk | 48 MB | Mostly librime dylib and prebuilt dictionaries |
+| User DB | 68 KB | `~/Library/Rime/rime_ice.userdb`, grows with use |
+
+No memory growth was seen over the uptime (peak is within 0.5 MB of current).
+
+```bash
+footprint $(pgrep -x Squirrel)             # physical footprint by category
+vmmap --summary $(pgrep -x Squirrel)       # incl. mapped dictionary files
+ps -o rss,%cpu,etime,time -p $(pgrep -x Squirrel)
 ```
 
 ## Localization
