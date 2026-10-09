@@ -36,6 +36,8 @@ This file contains essential information for AI coding agents working on the Squ
 - `data/rime_ice/`: the only bundled input schema (雾凇拼音, simplified Chinese), a lite cut of
   [rime-ice](https://github.com/iDvel/rime-ice). `cn_dicts/{8105,base,others}` are synced from upstream (`da1fbe6`);
   `ext`/`tencent` are not bundled. The schema is trimmed locally, so do not overwrite it with upstream's.
+  `base.dict.yaml` is then pruned by `scripts/trim_dicts.py` (drops weight <= 10 and phrases over 8 characters,
+  ~120k entries); re-run it after every upstream sync.
 
 ## Project Structure
 
@@ -63,6 +65,7 @@ This file contains essential information for AI coding agents working on the Squ
 ├── bin/, lib/                  # Copied from librime/dist by `make copy-rime-binaries` (gitignored)
 ├── package/                    # Packaging scripts (make_package, make_archive, sign_app)
 ├── scripts/postinstall         # pkg postinstall: register, prebuild, enable input source
+├── scripts/trim_dicts.py       # prune rime_ice base dict after an upstream sync
 └── Squirrel.xcodeproj/         # Xcode project
 ```
 
