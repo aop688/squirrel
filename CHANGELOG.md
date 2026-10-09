@@ -1,3 +1,30 @@
+<a name="1.1.3"></a>
+## 1.1.3 (2026-10-09)
+
+### Bug 修復 | Bug Fixes
+- input source path, session leak, panel edge cases (0fce2ee)
+- deploy notifications, restart after cancelled logout, single input mode (db719ee)
+- bundle only rime_ice in schema_list; log notification failures (893567e)
+- load theme at startup (e795d48)
+- unescape $1 in rime_ice speller algebra and preedit_format (0110f40)
+
+### 詞庫 | Data
+- vendor prelude data; drop plum and plugins (e795d48)
+- sync rime_ice cn_dicts with upstream rime-ice da1fbe6 (e76cf2f)
+- prune base dict of rare and overlong entries, ~120k of 543k removed (999403c)
+
+### 構建 | Build
+- make cloud build work and upload installer and app artifacts (8795580)
+- static data bundling, vendored librime only (fd802d8)
+- run commit ci on branches containing a slash (ec77e26)
+
+### 雜項 | Miscellaneous
+- remove Sparkle (0fce2ee)
+- extract rect union utility and eliminate force casting (6654fe5)
+- add resource usage baseline and rime_ice upstream sync note (a73b03c)
+
+**Full Changelog**: https://github.com/aop688/squirrel/compare/dcab671...1.1.3
+
 <a name="1.1.2"></a>
 ## 1.1.2 (2026-01-13)
 
