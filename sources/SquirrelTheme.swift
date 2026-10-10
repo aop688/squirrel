@@ -28,30 +28,31 @@ final class SquirrelTheme {
   private(set) var memorizeSize = true
   private var colorSpace: RimeColorSpace = .sRGB
 
-  // Dark blue theme as default (matching 2.png)
+  // Default dark theme: gray panel, off-white text, highlighted candidate marked by yellow text only (no highlight background).
+  // Hierarchy: highlighted candidate > candidates > comments > labels
   var backgroundColor: NSColor = NSColor(srgbRed: 0x2D/255, green: 0x2D/255, blue: 0x2D/255, alpha: 1)
   var highlightedPreeditColor: NSColor?
-  var highlightedBackColor: NSColor? = NSColor(srgbRed: 0x0A/255, green: 0x84/255, blue: 0xFF/255, alpha: 1)
+  var highlightedBackColor: NSColor?
   var preeditBackgroundColor: NSColor?
   var candidateBackColor: NSColor?
   var borderColor: NSColor? = NSColor(srgbRed: 0x3D/255, green: 0x3D/255, blue: 0x3D/255, alpha: 1)
 
-  private var textColor: NSColor = .white
-  private var highlightedTextColor: NSColor = .white
-  private var candidateTextColor: NSColor = .white
-  private var highlightedCandidateTextColor: NSColor = .white
+  private var textColor: NSColor = NSColor(srgbRed: 0xE6/255, green: 0xED/255, blue: 0xF3/255, alpha: 1)
+  private var highlightedTextColor: NSColor = NSColor(srgbRed: 0xE6/255, green: 0xED/255, blue: 0xF3/255, alpha: 1)
+  private var candidateTextColor: NSColor = NSColor(srgbRed: 0xE6/255, green: 0xED/255, blue: 0xF3/255, alpha: 1)
+  private var highlightedCandidateTextColor: NSColor = NSColor(srgbRed: 0xFA/255, green: 0xBD/255, blue: 0x2F/255, alpha: 1)
   private var candidateLabelColor: NSColor? = NSColor(srgbRed: 0x88/255, green: 0x88/255, blue: 0x88/255, alpha: 1)
-  private var highlightedCandidateLabelColor: NSColor? = .white
-  private var commentTextColor: NSColor? = NSColor(srgbRed: 0x88/255, green: 0x88/255, blue: 0x88/255, alpha: 1)
-  private var highlightedCommentTextColor: NSColor? = NSColor(srgbRed: 0xCC/255, green: 0xCC/255, blue: 0xCC/255, alpha: 1)
+  private var highlightedCandidateLabelColor: NSColor? = NSColor(srgbRed: 0xA8/255, green: 0x8A/255, blue: 0x3A/255, alpha: 1)
+  private var commentTextColor: NSColor? = NSColor(srgbRed: 0x9D/255, green: 0xA5/255, blue: 0xAE/255, alpha: 1)
+  private var highlightedCommentTextColor: NSColor? = NSColor(srgbRed: 0xFA/255, green: 0xBD/255, blue: 0x2F/255, alpha: 1)
 
-  private(set) var cornerRadius: CGFloat = 6
-  private(set) var hilitedCornerRadius: CGFloat = 4
+  private(set) var cornerRadius: CGFloat = 5
+  private(set) var hilitedCornerRadius: CGFloat = 0
   private(set) var surroundingExtraExpansion: CGFloat = 0
   private(set) var shadowSize: CGFloat = 0
-  private(set) var borderWidth: CGFloat = 0
-  private(set) var borderHeight: CGFloat = 0
-  private(set) var linespace: CGFloat = 4
+  private(set) var borderWidth: CGFloat = 2
+  private(set) var borderHeight: CGFloat = 1
+  private(set) var linespace: CGFloat = 3
   private(set) var preeditLinespace: CGFloat = 4
   private(set) var baseOffset: CGFloat = 0
   private(set) var alpha: CGFloat = 1
@@ -70,7 +71,8 @@ final class SquirrelTheme {
   private var labelFontSize: CGFloat?
   private var commentFontSize: CGFloat?
 
-  private var _candidateFormat = "[label]. [candidate] [comment]"
+  // label and candidate separated by a thin space (U+2009)
+  private var _candidateFormat = "[label]\u{2009}[candidate]"
 
   private var defaultFont: NSFont {
     if let size = fontSize {
